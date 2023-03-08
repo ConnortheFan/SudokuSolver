@@ -41,7 +41,7 @@ Checking the rows and columns should be easy simply using Array indexing. A bool
 Once all rows and columns are checked, time to check the boxes. This should actually be pretty simple using a nested for loop, like:
 ```
 for (int i = 0; i < 9; i += 3) {
-  for (int j = 0; j < 9; j += 3 {
+  for (int j = 0; j < 9; j += 3) {
     ...
   }
 }
@@ -154,3 +154,33 @@ SolveSudoku() will be the main method that puts all other solving methods togeth
 Now that the java code itself is finished, I need to be able to run this code from the terminal. Using what I've learned from CSE 15L, I can write a bash script `SolveSudoku.sh` that compiles and runs the code using whatever Sudoku file I want. I may even be able to specify what the result file will be or use output redirection to have my methods print out the result instead and redirect it into a .txt file. 
 
 And that's all I have planned for now. Now whether I actually code all of this, we'll have to see. It's 6:39am now and my surge of inspiration hopefully won't run out anytime soon. 
+
+# Modification log
+
+## 3/7/2023
+
+It's been a while, but I'm back and have the time to work on this. 
+
+### class Cell
+
+I've made the Sudoku class and decided to have a Cell class as well, to represent each cell. I'll use these Cells to make it easier to implement the solving methods because each Cell has a `boolean solved` instance variable, which is simply if the Cell has a set digit yet or not. Based on this, I can make my methods more efficient since it can do one check for a cell before moving on if its already solved. 
+
+Each cell also has `ArrayList<Integer> possibleDigits` and `int digit` instance variables, which are assigned respectively whether the cell is created with a given digit or not.
+
+The Cell class also has a few protected helper methods like `remove()` and `set()` and whatnot to make my life easier in the future. `remove()` returns a boolean whether any changed were made, in anticipation of the future, where I have to check if any changes were made. So far, the helper methods are: 
+
+* `void set(int digit)` 
+* `boolean solved()`
+* `ArrayList<Intger> getPossibleDigits()`
+* `int getDigit()`
+* `boolean remove(int digit)`
+
+## class Sudoku
+
+All I've made are the constructors for Sudoku. There's a no-args constructor, which just makes a blank board, which is mostly useless, but just in case I want to expand what this program is for (*hint hint wink wink*).
+
+The `Sudoku(String sudokuFile)` constructor is more of the meat of this class. It takes a file, preferably a .txt file, with valid formatting as explained above, and uses a `Scanner` to read through the file. It uses the `next()` method to take whole lines, then the `split(" ")` method to break up the lines into its digits. These digits are then parsed to an int, and used to construct new Cell objects.
+
+The Sudoku uses a 2D Cell array as it's backend data structure, since the size shouldn't change at all and it makes it super easy to call certain cells based on their coordinates (CSE 12 Data Structures taught me this). 
+
+For the rest of the Sudoku class, I plan to create some more basic methods like `set()` or `note()` or `checkValid()` since these are mostly basic Sudoku methods and not exclusive to the SudokuSolver. I'm also planning to have the SudokuSolver extend Sudoku, so these basic methods can be called there too. This way, if I were to decide to expand this into a webApp, where you can play Sudoku, the basic Sudoku class can be used instead of just SudokuSolver. 
