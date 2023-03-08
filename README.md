@@ -159,6 +159,8 @@ And that's all I have planned for now. Now whether I actually code all of this, 
 
 ## 3/7/2023
 
+#### 9:32pm
+
 It's been a while, but I'm back and have the time to work on this. 
 
 ### class Cell
@@ -184,3 +186,34 @@ The `Sudoku(String sudokuFile)` constructor is more of the meat of this class. I
 The Sudoku uses a 2D Cell array as it's backend data structure, since the size shouldn't change at all and it makes it super easy to call certain cells based on their coordinates (CSE 12 Data Structures taught me this). 
 
 For the rest of the Sudoku class, I plan to create some more basic methods like `set()` or `note()` or `checkValid()` since these are mostly basic Sudoku methods and not exclusive to the SudokuSolver. I'm also planning to have the SudokuSolver extend Sudoku, so these basic methods can be called there too. This way, if I were to decide to expand this into a webApp, where you can play Sudoku, the basic Sudoku class can be used instead of just SudokuSolver. 
+
+#### 10:34pm
+
+I've made changes to the Cell class and implemented a couple methods into the Sudoku class.
+
+### Cell
+
+Now for each cell, it also contains what row and column that cell is. This makes it easier for me to get the coordinates of a certain cell, which helps with the Sudoku methods. The constructors have been changed accordingly and 2 new helper methods have been added:
+
+* `int getRow()`
+* `int getColumn()`
+
+### Sudoku
+
+I first wanted to implement the `boolean checkValid()` method, which I started to do. Then while doing so, I realized that I should also implement a few helper methods too. 
+
+The first helper method should be `ArrayList<Cell> getRelatedCells(int x, int y)`, which takes a cell's coordinates and finds all related cells, excluding itself. This then led to me implementing: 
+
+* `ArrayList<Cell> getBox(int x, int y)`
+* `ArrayList<Cell> getRow(int x, int y)`
+* `ArrayList<Cell> getColumn(int x, int y)`
+
+These all do what their named to do based on a cell's coordinates. Finally, this led to me implementing the helper method `Cell getCell(int x, int y)`, which just returns a cell given coordinates. 
+
+Next, instead of checking through every cell on the board, I decided to have `ArrayList<Cell> solvedCells` as an instance variable for Sudoku. When the Cells are constructed, they will be added to this list if they are given digits. This makes it easier to iterate through all solved cells.
+
+All these added up into the `getRelatedCells` method, finally.
+
+Next, I wanted to implement `boolean setDigit(int digit, int x, int y)`, which just sets a digit given coordinates. This is simple enough and returns whether the setting was successful.
+
+Lastly, I implemented `boolean propogate(int x, int y)`, which propogates the digit of a cell to other related cells. It is assumed that this is to be used right after `setDigit`. It uses the helper method `getRelatedCells` and returns whether any changes were made, for use in the SudokuSolver main algorithm. 
